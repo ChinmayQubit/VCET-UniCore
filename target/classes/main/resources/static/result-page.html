@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Official NEP Marksheet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=2">
+</head>
+<body class="dashboard-body marksheet-bg">
+
+    <div class="marksheet-container">
+        
+        <!-- Header -->
+        <header class="marksheet-header">
+            <div class="logo-box">
+                <img src="College_Logo_R-removebg-preview.png" alt="University Logo">
+            </div>
+            <div class="university-titles">
+                <h1>VIDYAVARDHINI'S COLLEGE OF ENGINEERING AND TECHNOLOGY</h1>
+                <h2>STATEMENT OF MARKS</h2>
+                <h3>BE NEP 2020 Framework - SEMESTER RESULT</h3>
+            </div>
+        </header>
+
+        <!-- Student Details -->
+        <div class="marksheet-details">
+            <div class="detail-row">
+                <span><strong>Student ID:</strong> <span id="msStudentId">--</span></span>
+                <span><strong>Semester:</strong> <span id="msSemester">--</span></span>
+            </div>
+        </div>
+
+        <!-- Result Table -->
+        <div class="marksheet-table-wrapper">
+            <table class="marksheet-table">
+                <thead>
+                    <tr>
+                        <th>Sr.No</th>
+                        <th>Course Code</th>
+                        <th>Course</th>
+                        <th>Internal Marks</th>
+                        <th>External Marks</th>
+                        <th>Total Marks</th>
+                        <th>Credit Point (C)</th>
+                        <th>Grade</th>
+                        <th>Pointer (G)</th>
+                        <th>Credit Grade (C*G)</th>
+                    </tr>
+                </thead>
+                <tbody id="marksheetTableBody">
+                    <!-- Javascript Injected -->
+                </tbody>
+                <tfoot>
+                    <tr class="table-total-row">
+                        <td colspan="5" style="text-align: right; padding-right: 1rem;"><strong>TOTAL</strong></td>
+                        <td id="msTotalMarks">-- / --</td>
+                        <td id="msTotalCredits">--</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td id="msTotalCreditGrades">--</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- KPI Block -->
+        <div class="marksheet-kpis">
+            <div class="kpi-box sgpa-box">SGPA: <span id="msSgpa">--</span></div>
+            <div class="kpi-box cgpa-box">CGPA: <span id="msCgpa">--</span></div>
+            <div class="kpi-box percentage-box">Percentage: <span id="msPercentage">--</span>%</div>
+            <div class="kpi-box result-box" id="msResultStatus">Result: --</div>
+        </div>
+        
+        <!-- Target / Predict AI Additions requested -->
+        <div class="marksheet-ai-additions" style="margin-top: 1rem; border-top: 1px dashed #ccc; padding-top: 1rem; text-align:center; font-size:0.9rem; color:#555;">
+            <strong>AI Analytics:</strong> Predicted Final CGPA: <span id="msAiCgpa">--</span> | Target Next Sem SGPA: <span id="msTargetSgpa">--</span>
+        </div>
+
+        <div style="text-align:center; margin-top:2rem;">
+            <a href="student-dashboard.html" class="btn-primary" style="text-decoration:none; padding:10px 20px;">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script src="result-calculation.js?v=2"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initResultPage();
+        });
+    </script>
+</body>
+</html>
