@@ -8,6 +8,9 @@ const studentId = localStorage.getItem('studentId') || 1; // Default to 1 for de
 
 /** ---------------- STUDENT DASHBOARD ---------------- **/
 async function initStudentDashboard() {
+    // Load announcements independently (don't block KPIs)
+    loadStudentAnnouncements();
+
     try {
         // Fetch core KPIs concurrently where applicable
         const [cgpa, aiCgpa, aiTarget, trendData, advisor, companies, rawResults, attendance] = await Promise.all([
@@ -239,5 +242,37 @@ async function submitChangePassword(event) {
     } catch (error) {
         console.error("Change Password Error:", error);
         alert('An error occurred while changing the password.');
+    }
+}
+
+/** ---------------- STUDENT ANNOUNCEMENTS ---------------- **/
+async function loadStudentAnnouncements() {
+    const container = document.getElementById('studentAnnouncementsList');
+    if (!container) return;
+
+    try {
+        const announcements = await fetchData(`/announcements/student/${studentId}`);
+
+        if (!announcements || announcements.length === 0) {
+            container.innerHTML = '<p style="color:var(--text-muted); font-size:0.9rem;">No announcements at this time.</p>';
+            return;
+        }
+
+        container.innerHTML = '';
+        announcements.forEach(a => {
+            const date = a.createdAt ? new Date(a.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+            container.innerHTML += `
+                <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:14px 18px; margin-bottom:10px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <strong style="font-size:1rem; color:#f59e0b;">${a.title}</strong>
+                        <span style="font-size:0.75rem; color:var(--text-muted);">${date}</span>
+                    </div>
+                    <p style="margin:0; font-size:0.9rem; color:#cbd5e1; line-height:1.5;">${a.message}</p>
+                </div>
+            `;
+        });
+    } catch (err) {
+        console.error('Failed to load announcements:', err);
+        container.innerHTML = '<p style="color:var(--text-muted);">Could not load announcements.</p>';
     }
 }

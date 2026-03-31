@@ -32,6 +32,7 @@
                 <a href="#" class="nav-item" onclick="switchTab('results', this); return false;">Results</a>
                 <a href="attendance-marking.html" class="nav-item">Attendance</a>
                 <a href="#" class="nav-item" onclick="switchTab('analytics', this); loadAnalytics(); return false;">Analytics</a>
+                <a href="#" class="nav-item" onclick="switchTab('announcements', this); loadAnnouncements(); return false;">Announcements</a>
                 <a href="#" class="nav-item mt-auto" onclick="logout(); return false;">Logout</a>
             </nav>
         </aside>
@@ -99,6 +100,7 @@
                                     <input type="number" id="studSem" min="1" max="8" required>
                                 </div>
                             </div>
+                            <button type="submit" class="btn-primary" style="margin-top: 15px;">Add Student</button>
                             </form>
                         </div>
                         <div style="padding-left:1rem; border-left:1px solid rgba(255,255,255,0.1); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
@@ -239,6 +241,61 @@
                         <h2>📈 CGPA Comparison Chart</h2>
                         <div class="chart-container" style="height:300px;">
                             <canvas id="adminDeptChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB: Announcements -->
+                <div id="tab-announcements" class="tab-pane hidden">
+                    <div class="card form-card mb-4">
+                        <h2>📢 Post New Announcement</h2>
+                        <form id="postAnnouncementForm" class="admin-form" onsubmit="postAnnouncement(event)">
+                            <div class="form-row">
+                                <div class="form-group" style="flex:1;">
+                                    <label>Title</label>
+                                    <input type="text" id="annTitle" required placeholder="e.g. Exam Schedule Update">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom:1rem;">
+                                <label>Message</label>
+                                <textarea id="annMessage" required rows="4" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; padding:12px; font-family:inherit; font-size:0.95rem; resize:vertical;" placeholder="Write your announcement here..."></textarea>
+                            </div>
+                            <div class="form-row" style="align-items:center; gap:1.5rem; margin-bottom:1rem;">
+                                <div style="display:flex; align-items:center; gap:0.75rem;">
+                                    <label style="margin:0; font-weight:600;">Target:</label>
+                                    <label style="display:flex; align-items:center; gap:4px; cursor:pointer; margin:0;">
+                                        <input type="radio" name="annTarget" value="ALL" checked onchange="toggleStudentIdField()"> All Students
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:4px; cursor:pointer; margin:0;">
+                                        <input type="radio" name="annTarget" value="SELECTED" onchange="toggleStudentIdField()"> Selected Students
+                                    </label>
+                                </div>
+                                <div id="annStudentIdGroup" style="display:none; flex:1;">
+                                    <input type="text" id="annStudentIds" placeholder="Enter student IDs (e.g. 1, 3, 5)" style="width:100%;">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary">Post Announcement</button>
+                        </form>
+                    </div>
+
+                    <div class="card table-card">
+                        <h2>Announcement History</h2>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                        <th>Message</th>
+                                        <th>Target</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="announcementsTableBody">
+                                    <!-- injected via JS -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

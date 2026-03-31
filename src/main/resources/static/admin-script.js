@@ -120,7 +120,7 @@ async function addStudent(e) {
         if (!response.ok) throw new Error("Failed to add student");
 
         const result = await response.json();
-        alert(`✅ Student added successfully!\n\nAn official Welcome Email containing the required Claim Code (${result.claimToken}) has been automatically dispatched to ${email}.`);
+        alert(`✅ Student added successfully!\n\nAn official Welcome Email containing the required Claim Code (${result.claimToken}) has been automatically dispatched to ${studentData.email}.`);
         e.target.reset();
         await loadStudents();
     } catch (err) {
@@ -537,3 +537,98 @@ async function bulkUploadResults() {
     }
 }
 
+/** ---------------- ANNOUNCEMENTS ---------------- **/
+
+function toggleStudentIdField() {
+    const selected = document.querySelector('input[name="annTarget"]:checked').value;
+    document.getElementById('annStudentIdGroup').style.display = selected === 'SELECTED' ? 'block' : 'none';
+}
+
+async function postAnnouncement(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.innerText = 'Posting...';
+
+    const targetType = document.querySelector('input[name="annTarget"]:checked').value;
+    const data = {
+        title: document.getElementById('annTitle').value.trim(),
+        message: document.getElementById('annMessage').value.trim(),
+        targetType: targetType,
+        targetStudentIds: targetType === 'SELECTED' ? document.getElementById('annStudentIds').value.trim() : null
+    };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/announcements`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) throw new Error('Failed to post announcement');
+
+        alert('📢 Announcement posted successfully!');
+        e.target.reset();
+        document.getElementById('annStudentIdGroup').style.display = 'none';
+        await loadAnnouncements();
+    } catch (err) {
+        console.error(err);
+        alert('Failed to post announcement.');
+    } finally {
+        btn.disabled = false;
+        btn.innerText = 'Post Announcement';
+    }
+}
+
+async function loadAnnouncements() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/announcements`);
+        if (!response.ok) throw new Error('Failed to load announcements');
+        const announcements = await response.json();
+
+        const tbody = document.getElementById('announcementsTableBody');
+        tbody.innerHTML = '';
+
+        if (announcements.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:1.5rem; color:var(--text-muted);">No announcements yet. Post your first one above!</td></tr>';
+            return;
+        }
+
+        announcements.forEach(a => {
+            const date = a.createdAt ? new Date(a.createdAt).toLocaleString() : '—';
+            const target = a.targetType === 'ALL'
+                ? '<span style="color:#10b981; font-weight:600;">All Students</span>'
+                : `<span style="color:#f59e0b; font-weight:600;">IDs: ${a.targetStudentIds}</span>`;
+            const msgPreview = a.message.length > 80 ? a.message.substring(0, 80) + '...' : a.message;
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${a.id}</td>
+                    <td><strong>${a.title}</strong></td>
+                    <td style="font-size:0.85rem; color:var(--text-muted); max-width:300px;">${msgPreview}</td>
+                    <td>${target}</td>
+                    <td style="font-size:0.8rem;">${date}</td>
+                    <td>
+                        <button type="button" class="btn-outline" style="border-color:var(--accent-red); color:var(--accent-red); padding:4px 8px; font-size:12px;" onclick="deleteAnnouncement(${a.id})">Delete</button>
+                    </td>
+                </tr>
+            `;
+        });
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function deleteAnnouncement(id) {
+    if (!confirm(`Delete Announcement ID: ${id}?`)) return;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/announcements/${id}`, { method: 'DELETE' });
+        if (!response.ok) throw new Error('Delete failed');
+        alert('Announcement deleted.');
+        await loadAnnouncements();
+    } catch (err) {
+        console.error(err);
+        alert('Could not delete announcement.');
+    }
+}

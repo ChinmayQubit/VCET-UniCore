@@ -47,7 +47,11 @@ public class StudentController {
         Student saved = studentRepository.save(student);
         
         // Dispatch Welcome Email
-        emailService.sendStudentWelcomeEmail(saved.getEmail(), saved.getName(), token);
+        try {
+            emailService.sendStudentWelcomeEmail(saved.getEmail(), saved.getName(), token);
+        } catch (Exception e) {
+            System.err.println("Could not dispatch welcome email to " + saved.getEmail() + ": " + e.getMessage());
+        }
 
         return ResponseEntity.ok(Map.of(
                 "student", saved,
@@ -165,7 +169,11 @@ public class StudentController {
                     studentRepository.save(student);
                     
                     // Dispatch Password Reset Email
-                    emailService.sendStudentWelcomeEmail(student.getEmail(), student.getName(), token);
+                    try {
+                        emailService.sendStudentWelcomeEmail(student.getEmail(), student.getName(), token);
+                    } catch (Exception e) {
+                        System.err.println("Could not dispatch password reset email to " + student.getEmail() + ": " + e.getMessage());
+                    }
 
                     return ResponseEntity.ok(Map.of(
                             "claimToken", (Object) token,
