@@ -11,7 +11,6 @@ export default defineConfig({
                 studentDashboard: resolve(__dirname, 'student-dashboard.html'),
                 adminDashboard: resolve(__dirname, 'admin-dashboard.html'),
                 adminResultEntry: resolve(__dirname, 'admin-result-entry.html'),
-                attendanceMarking: resolve(__dirname, 'attendance-marking.html'),
                 resultPage: resolve(__dirname, 'result-page.html'),
                 facultyDashboard: resolve(__dirname, 'faculty-dashboard.html')
             }
