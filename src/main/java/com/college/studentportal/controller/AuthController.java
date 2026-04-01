@@ -1,9 +1,12 @@
 package com.college.studentportal.controller;
 
 import com.college.studentportal.model.Admin;
+import com.college.studentportal.model.Faculty;
 import com.college.studentportal.model.Student;
 import com.college.studentportal.repository.AdminRepository;
+import com.college.studentportal.repository.FacultyRepository;
 import com.college.studentportal.repository.StudentRepository;
+import com.college.studentportal.security.JwtService;
 import com.college.studentportal.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +21,21 @@ public class AuthController {
 
     private final StudentRepository studentRepository;
     private final AdminRepository adminRepository;
+    private final FacultyRepository facultyRepository;
     private final AuthService authService;
     private final com.college.studentportal.service.EmailService emailService;
+    private final JwtService jwtService;
 
-    public AuthController(StudentRepository studentRepository, AdminRepository adminRepository, AuthService authService, com.college.studentportal.service.EmailService emailService) {
+    public AuthController(StudentRepository studentRepository, AdminRepository adminRepository,
+                          FacultyRepository facultyRepository,
+                          AuthService authService, com.college.studentportal.service.EmailService emailService,
+                          JwtService jwtService) {
         this.studentRepository = studentRepository;
         this.adminRepository = adminRepository;
+        this.facultyRepository = facultyRepository;
         this.authService = authService;
         this.emailService = emailService;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
@@ -46,7 +56,18 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid email or password."));
         }
 
-        return ResponseEntity.ok(student);
+        // Generate JWT token instead of returning raw student entity
+        String token = jwtService.generateToken(student.getEmail(), "STUDENT", student.getId());
+
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "role", "STUDENT",
+                "studentId", student.getId(),
+                "name", student.getName(),
+                "email", student.getEmail(),
+                "department", student.getDepartment(),
+                "semester", student.getSemester()
+        ));
     }
 
     @PostMapping("/admin-login")
@@ -62,7 +83,38 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid admin credentials."));
         }
         
-        return ResponseEntity.ok(admin);
+        // Generate JWT token instead of returning raw admin entity
+        String token = jwtService.generateToken(admin.getEmail(), "ADMIN", admin.getId());
+        
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "role", "ADMIN",
+                "email", admin.getEmail()
+        ));
+    }
+
+    @PostMapping("/faculty-login")
+    public ResponseEntity<?> facultyLogin(@RequestParam("email") String email, @RequestParam("password") String password) {
+        Optional<Faculty> facultyOpt = facultyRepository.findByEmail(email);
+        
+        if (facultyOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid faculty credentials."));
+        }
+        
+        Faculty faculty = facultyOpt.get();
+        if (!authService.verifyPassword(password, faculty.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid faculty credentials."));
+        }
+        
+        String token = jwtService.generateToken(faculty.getEmail(), "FACULTY", faculty.getId());
+        
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "role", "FACULTY",
+                "email", faculty.getEmail(),
+                "name", faculty.getName(),
+                "department", faculty.getDepartment()
+        ));
     }
 
     @PostMapping("/claim-account")
@@ -116,6 +168,32 @@ public class AuthController {
         
         return ResponseEntity.ok(Map.of(
                 "message", "A password reset email with detailed instructions has been successfully forwarded to your inbox."
+        ));
+    }
+
+    @PostMapping("/faculty/forgot-password")
+    public ResponseEntity<?> facultyForgotPassword(@RequestParam("email") String email) {
+        if (email == null || email.isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "Please enter your registered email address."));
+        }
+        
+        Optional<Faculty> facultyOpt = facultyRepository.findByEmail(email);
+        if (facultyOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("message", "No faculty account found with the provided email address."));
+        }
+        
+        Faculty faculty = facultyOpt.get();
+        // Generate a new temporary 8-character password
+        String newTempPassword = java.util.UUID.randomUUID().toString().substring(0, 8);
+        
+        faculty.setPassword(authService.hashPassword(newTempPassword));
+        facultyRepository.save(faculty);
+        
+        // Dispatch live email to the faculty with the temporary password
+        emailService.sendFacultyPasswordResetEmail(faculty.getEmail(), faculty.getName(), newTempPassword);
+        
+        return ResponseEntity.ok(Map.of(
+                "message", "A new temporary password has been successfully dispatched to your inbox. You may use it to log in immediately."
         ));
     }
 

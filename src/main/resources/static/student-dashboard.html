@@ -8,8 +8,10 @@
     <meta http-equiv="Expires" content="0">
     <title>Student Dashboard - VCET</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" crossorigin src="/assets/studentDashboard-frv4hCLH.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/auth-BMHW_D6G.js">
+  <link rel="stylesheet" crossorigin href="/assets/dashboard-BreYS_Oz.css">
 </head>
 <body class="dashboard-body">
 
@@ -42,6 +44,17 @@
             <div class="risk-text">
                 <h3>Academic Risk Detected</h3>
                 <p id="riskMessage">Your CGPA is below the safe threshold or your trend is declining. Focus specifically on your weak subjects to improve.</p>
+            </div>
+        </div>
+
+        <!-- Announcements Section -->
+        <div id="studentAnnouncementsSection" class="card" style="margin-bottom: 1.5rem; border-left: 4px solid #f59e0b; padding: 1.5rem;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:1rem;">
+                <span style="font-size:1.5rem;">📢</span>
+                <h2 style="margin:0; font-size:1.15rem;">Announcements</h2>
+            </div>
+            <div id="studentAnnouncementsList" style="max-height:300px; overflow-y:auto;">
+                <p style="color:var(--text-muted);">Loading announcements...</p>
             </div>
         </div>
 
@@ -159,11 +172,5 @@
         </div>
     </div>
 
-    <script src="dashboard.js?v=2"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            initStudentDashboard();
-        });
-    </script>
 </body>
 </html>

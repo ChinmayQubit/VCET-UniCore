@@ -1,0 +1,629 @@
+/* ============================================================
+   VCET Student Portal – Login Page Styles
+   University-level premium design: Deep Navy + Gold
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+    /* Core Palette */
+    --navy-950: #040a18;
+    --navy-900: #0a1628;
+    --navy-800: #101f3c;
+    --navy-700: #1a2f52;
+    --navy-600: #263f68;
+
+    /* VCET Gold */
+    --gold-500: #c9a227;
+    --gold-400: #d4b240;
+    --gold-300: #e0c462;
+    --gold-200: #ecd88e;
+    --gold-100: #f7edc4;
+
+    /* Neutrals */
+    --warm-white: #faf7f0;
+    --cream: #f0ebe0;
+    --text-light: #c8c4b8;
+    --text-muted: #8a8577;
+    --text-dark: #1a1814;
+
+    /* Accents */
+    --accent-red: #e74c3c;
+    --accent-green: #2ecc71;
+
+    /* Spacing */
+    --radius: 14px;
+    --radius-sm: 8px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--navy-950);
+    color: var(--warm-white);
+    overflow-x: hidden;
+}
+
+/* ============================================================
+   ANIMATED BACKGROUND SCENE
+   ============================================================ */
+
+.bg-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: url('/VCET-Home-1-scaled.jpg') center/cover no-repeat;
+}
+
+.bg-gradient {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 60% 50% at 20% 50%, rgba(201, 162, 39, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 70% at 80% 30%, rgba(38, 63, 104, 0.35) 0%, transparent 60%),
+        radial-gradient(circle at 50% 110%, rgba(201, 162, 39, 0.15) 0%, transparent 40%),
+        linear-gradient(175deg, rgba(4, 10, 24, 0.85) 0%, rgba(10, 22, 40, 0.85) 40%, rgba(16, 31, 60, 0.9) 100%);
+}
+
+/* Floating geometric shapes */
+.geo {
+    position: absolute;
+    border: 1px solid rgba(201, 162, 39, 0.12);
+    border-radius: 4px;
+    animation: geoFloat 20s ease-in-out infinite;
+}
+
+.geo-1 {
+    width: 120px; height: 120px;
+    top: 10%; left: 5%;
+    transform: rotate(15deg);
+    animation-duration: 25s;
+    border-color: rgba(201, 162, 39, 0.10);
+}
+
+.geo-2 {
+    width: 80px; height: 80px;
+    top: 60%; right: 10%;
+    transform: rotate(45deg);
+    animation-duration: 18s;
+    animation-delay: -5s;
+    border-color: rgba(201, 162, 39, 0.08);
+}
+
+.geo-3 {
+    width: 200px; height: 200px;
+    bottom: 15%; left: 15%;
+    transform: rotate(-10deg);
+    animation-duration: 30s;
+    animation-delay: -10s;
+    border-color: rgba(38, 63, 104, 0.15);
+    border-radius: 50%;
+}
+
+.geo-4 {
+    width: 60px; height: 60px;
+    top: 25%; right: 25%;
+    transform: rotate(30deg);
+    animation-duration: 22s;
+    animation-delay: -3s;
+    border-color: rgba(201, 162, 39, 0.06);
+}
+
+.geo-5 {
+    width: 150px; height: 150px;
+    top: 70%; left: 60%;
+    transform: rotate(-20deg);
+    animation-duration: 28s;
+    animation-delay: -8s;
+    border-color: rgba(38, 63, 104, 0.10);
+    border-radius: 50%;
+}
+
+@keyframes geoFloat {
+    0%, 100% { transform: translateY(0) rotate(var(--rot, 15deg)); opacity: 0.6; }
+    25% { transform: translateY(-20px) rotate(calc(var(--rot, 15deg) + 8deg)); opacity: 1; }
+    50% { transform: translateY(10px) rotate(calc(var(--rot, 15deg) - 5deg)); opacity: 0.5; }
+    75% { transform: translateY(-15px) rotate(calc(var(--rot, 15deg) + 3deg)); opacity: 0.8; }
+}
+
+/* Floating particles */
+.particle-field {
+    position: absolute;
+    inset: 0;
+}
+
+.particle {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: rgba(201, 162, 39, 0.3);
+    border-radius: 50%;
+    animation: particleRise linear infinite;
+}
+
+.p1 { left: 15%; animation-duration: 12s; animation-delay: 0s; }
+.p2 { left: 35%; animation-duration: 16s; animation-delay: -4s; width: 2px; height: 2px; }
+.p3 { left: 55%; animation-duration: 14s; animation-delay: -7s; }
+.p4 { left: 75%; animation-duration: 18s; animation-delay: -2s; width: 4px; height: 4px; background: rgba(201, 162, 39, 0.15); }
+.p5 { left: 90%; animation-duration: 15s; animation-delay: -9s; width: 2px; height: 2px; }
+.p6 { left: 45%; animation-duration: 20s; animation-delay: -12s; }
+
+@keyframes particleRise {
+    0% { bottom: -10px; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { bottom: 105%; opacity: 0; }
+}
+
+/* ============================================================
+   LOGIN LAYOUT
+   ============================================================ */
+
+.login-wrapper {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.25rem;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 440px;
+    background: rgba(16, 31, 60, 0.65);
+    backdrop-filter: blur(24px) saturate(1.3);
+    -webkit-backdrop-filter: blur(24px) saturate(1.3);
+    border: 1px solid rgba(201, 162, 39, 0.15);
+    border-radius: var(--radius);
+    padding: 2.5rem 2.25rem 2rem;
+    box-shadow:
+        0 30px 60px -15px rgba(0, 0, 0, 0.6),
+        0 0 80px -20px rgba(201, 162, 39, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    animation: cardEnter 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    opacity: 0;
+}
+
+@keyframes cardEnter {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.97);
+        filter: blur(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+/* ============================================================
+   UNIVERSITY CREST
+   ============================================================ */
+
+.crest-area {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.crest-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 140px; height: 140px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(201, 162, 39, 0.45) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(20px);
+    pointer-events: none;
+    animation: pulseGlow 3s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    from { opacity: 0.7; transform: translate(-50%, -50%) scale(0.95); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+.college-crest {
+    width: 100px;
+    height: auto;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 4px 16px rgba(201, 162, 39, 0.45));
+    animation: crestReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+}
+
+@keyframes crestReveal {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ============================================================
+   CARD HEADER
+   ============================================================ */
+
+.card-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    animation: textReveal 0.6s ease 0.5s both;
+}
+
+@keyframes textReveal {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-header h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--warm-white);
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
+}
+
+.card-header .subtitle {
+    font-size: 0.85rem;
+    color: var(--gold-400);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* ============================================================
+   FORM STYLES
+   ============================================================ */
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    animation: formReveal 0.6s ease 0.65s both;
+}
+
+@keyframes formReveal {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.form-group label svg {
+    color: var(--gold-500);
+    flex-shrink: 0;
+}
+
+.form-group input,
+.form-group select {
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(201, 162, 39, 0.12);
+    background: rgba(10, 22, 40, 0.6);
+    font-size: 0.95rem;
+    color: var(--warm-white);
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-group input::placeholder {
+    color: rgba(200, 196, 184, 0.35);
+}
+
+.form-group select option {
+    background: var(--navy-800);
+    color: var(--warm-white);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--gold-500);
+    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.12), 0 0 20px -5px rgba(201, 162, 39, 0.15);
+    background: rgba(10, 22, 40, 0.8);
+}
+
+/* Password field with toggle */
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon input {
+    width: 100%;
+    padding-right: 3rem;
+}
+
+.toggle-pw {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.toggle-pw:hover {
+    color: var(--gold-400);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.form-actions {
+    margin-top: 0.5rem;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 0.85rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--gold-500) 0%, #b58d1f 100%);
+    color: var(--navy-950);
+    font-size: 0.95rem;
+    font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px -3px rgba(201, 162, 39, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    letter-spacing: 0.03em;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgba(201, 162, 39, 0.45);
+    background: linear-gradient(135deg, var(--gold-400) 0%, var(--gold-500) 100%);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px -2px rgba(201, 162, 39, 0.3);
+}
+
+.btn-login:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ============================================================
+   ERROR MESSAGE
+   ============================================================ */
+
+.error-message {
+    color: var(--accent-red);
+    font-size: 0.85rem;
+    text-align: center;
+    min-height: 1.2rem;
+    font-weight: 500;
+    transition: opacity 0.3s ease;
+}
+
+/* ============================================================
+   HELP LINK
+   ============================================================ */
+
+.help-link-row {
+    text-align: center;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: color 0.2s;
+    padding: 0.25rem 0;
+}
+
+.link-btn:hover {
+    color: var(--gold-400);
+    text-decoration: underline;
+}
+
+/* ============================================================
+   CARD FOOTER NOTE
+   ============================================================ */
+
+.card-divider {
+    height: 1px;
+    background: rgba(201, 162, 39, 0.1);
+    margin: 1.5rem 0 1rem;
+}
+
+.card-note {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.card-note svg {
+    color: var(--gold-500);
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.login-footer {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.login-footer p {
+    color: rgba(200, 196, 184, 0.4);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+}
+
+/* ============================================================
+   MODAL — Forgot Password
+   ============================================================ */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 10, 24, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+    animation: modalFadeIn 0.3s ease;
+}
+
+.modal-overlay.hidden { display: none; }
+
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-card {
+    background: rgba(16, 31, 60, 0.92);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(201, 162, 39, 0.15);
+    border-radius: var(--radius);
+    padding: 2rem;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    animation: modalSlideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.modal-header h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--warm-white);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-header h2 svg {
+    color: var(--gold-500);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    display: flex;
+}
+
+.modal-close:hover {
+    color: var(--warm-white);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.modal-note {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+}
+
+.modal-actions {
+    margin-top: 1rem;
+}
+
+.forgot-message {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin: 0.75rem 0 0;
+    min-height: 1.5rem;
+    color: var(--text-light);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 480px) {
+    .login-card {
+        padding: 2rem 1.5rem 1.5rem;
+    }
+
+    .card-header h1 {
+        font-size: 1.35rem;
+    }
+
+    .college-crest {
+        width: 70px;
+    }
+
+    .geo { display: none; }
+}
+
+@media (min-width: 1200px) {
+    .login-card {
+        max-width: 460px;
+    }
+}

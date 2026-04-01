@@ -14,6 +14,10 @@ public class Subject {
     private int credits;
     private int semester;
 
+    @ManyToOne
+    @JoinColumn(name = "faculty_id")
+    private Faculty faculty;
+
     public Subject() {}
 
     public Subject(String subjectName, int credits, int semester) {
@@ -32,4 +36,7 @@ public class Subject {
 
     public int getSemester() { return semester; }
     public void setSemester(int semester) { this.semester = semester; }
+
+    public Faculty getFaculty() { return faculty; }
+    public void setFaculty(Faculty faculty) { this.faculty = faculty; }
 }

@@ -27,3 +27,13 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### Build Output & Dependencies ###
+target/
+frontend/node_modules/
+frontend/dist/
+boot_error.log
+models/
+
+### Secrets ###
+.env

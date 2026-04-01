@@ -26,6 +26,10 @@ public class Attendance {
 
     private Integer sessionNumber; // To track multiple lectures of same subject on same day
 
+    @ManyToOne
+    @JoinColumn(name = "marked_by_faculty_id")
+    private Faculty markedBy;
+
     public enum AttendanceStatus {
         PRESENT, ABSENT
     }
@@ -58,4 +62,7 @@ public class Attendance {
 
     public Integer getSessionNumber() { return sessionNumber; }
     public void setSessionNumber(Integer sessionNumber) { this.sessionNumber = sessionNumber; }
+
+    public Faculty getMarkedBy() { return markedBy; }
+    public void setMarkedBy(Faculty markedBy) { this.markedBy = markedBy; }
 }

@@ -23,6 +23,8 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
     long countByStudentIdAndSubjectId(Long studentId, Long subjectId);
 
+    List<Attendance> findBySubjectIdAndDateAndSessionNumber(Long subjectId, LocalDate date, Integer sessionNumber);
+
     @Query("SELECT a FROM Attendance a WHERE a.student.id = :studentId AND a.subject.id = :subjectId AND a.date = :date AND a.sessionNumber = :sessionNumber")
     Optional<Attendance> findExisting(
             @Param("studentId") Long studentId,

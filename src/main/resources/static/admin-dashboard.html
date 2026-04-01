@@ -8,8 +8,10 @@
     <meta http-equiv="Expires" content="0">
     <title>Admin Dashboard - Project Elevate</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" crossorigin src="/assets/adminDashboard-xpEL1rQh.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/auth-BMHW_D6G.js">
+  <link rel="stylesheet" crossorigin href="/assets/dashboard-BreYS_Oz.css">
 </head>
 <body class="admin-body">
 
@@ -28,10 +30,12 @@
             <nav class="sidebar-nav">
                 <a href="#" class="nav-item active" onclick="switchTab('dashboard', this); return false;">Overview</a>
                 <a href="#" class="nav-item" onclick="switchTab('students', this); return false;">Students</a>
+                <a href="#" class="nav-item" onclick="switchTab('faculty', this); loadFaculty(); return false;">Faculty</a>
                 <a href="#" class="nav-item" onclick="switchTab('subjects', this); return false;">Subjects</a>
                 <a href="#" class="nav-item" onclick="switchTab('results', this); return false;">Results</a>
                 <a href="attendance-marking.html" class="nav-item">Attendance</a>
                 <a href="#" class="nav-item" onclick="switchTab('analytics', this); loadAnalytics(); return false;">Analytics</a>
+                <a href="#" class="nav-item" onclick="switchTab('announcements', this); loadAnnouncements(); return false;">Announcements</a>
                 <a href="#" class="nav-item mt-auto" onclick="logout(); return false;">Logout</a>
             </nav>
         </aside>
@@ -99,6 +103,7 @@
                                     <input type="number" id="studSem" min="1" max="8" required>
                                 </div>
                             </div>
+                            <button type="submit" class="btn-primary" style="margin-top: 15px;">Add Student</button>
                             </form>
                         </div>
                         <div style="padding-left:1rem; border-left:1px solid rgba(255,255,255,0.1); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
@@ -133,27 +138,82 @@
                     </div>
                 </div>
 
+                <!-- TAB: Manage Faculty -->
+                <div id="tab-faculty" class="tab-pane hidden">
+                    <div class="card form-card mb-4" style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+                        <div style="flex:1; min-width:300px;">
+                            <h2>Add New Faculty</h2>
+                            <form id="addFacultyForm" class="admin-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" id="facName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Official Email</label>
+                                    <input type="email" id="facEmail" required placeholder="faculty@vcet.edu.in">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Department</label>
+                                    <input type="text" id="facDept" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary" style="margin-top: 15px;">Add Faculty</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card table-card">
+                        <h2>Faculty Roster</h2>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Department</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminFacultyTableBody">
+                                    <!-- injected via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
                 <!-- TAB: Manage Subjects -->
                 <div id="tab-subjects" class="tab-pane hidden">
                     <div class="card form-card mb-4">
                         <h2>Add New Subject</h2>
-                        <form id="addSubjectForm" class="admin-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Subject Name</label>
-                                    <input type="text" id="subName" required>
+                            <form id="addSubjectForm" class="admin-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Subject Name</label>
+                                        <input type="text" id="subName" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Credits</label>
+                                        <input type="number" id="subCredits" min="1" max="6" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Semester</label>
+                                        <input type="number" id="subSem" min="1" max="8" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Assign Faculty (Optional)</label>
+                                        <select id="subFacId" style="background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 6px; width: 100%;">
+                                            <option value="">-- Unassigned --</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>Credits</label>
-                                    <input type="number" id="subCredits" min="1" max="6" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Semester</label>
-                                    <input type="number" id="subSem" min="1" max="8" required>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn-primary">Add Subject</button>
-                        </form>
+                                <button type="submit" class="btn-primary" style="margin-top: 15px;">Add Subject</button>
+                            </form>
                     </div>
 
                     <div class="card table-card">
@@ -166,6 +226,7 @@
                                         <th>Subject Name</th>
                                         <th>Credits</th>
                                         <th>Semester</th>
+                                        <th>Faculty</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -243,6 +304,61 @@
                     </div>
                 </div>
 
+                <!-- TAB: Announcements -->
+                <div id="tab-announcements" class="tab-pane hidden">
+                    <div class="card form-card mb-4">
+                        <h2>📢 Post New Announcement</h2>
+                        <form id="postAnnouncementForm" class="admin-form" onsubmit="postAnnouncement(event)">
+                            <div class="form-row">
+                                <div class="form-group" style="flex:1;">
+                                    <label>Title</label>
+                                    <input type="text" id="annTitle" required placeholder="e.g. Exam Schedule Update">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom:1rem;">
+                                <label>Message</label>
+                                <textarea id="annMessage" required rows="4" style="width:100%; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); border-radius:8px; color:#fff; padding:12px; font-family:inherit; font-size:0.95rem; resize:vertical;" placeholder="Write your announcement here..."></textarea>
+                            </div>
+                            <div class="form-row" style="align-items:center; gap:1.5rem; margin-bottom:1rem;">
+                                <div style="display:flex; align-items:center; gap:0.75rem;">
+                                    <label style="margin:0; font-weight:600;">Target:</label>
+                                    <label style="display:flex; align-items:center; gap:4px; cursor:pointer; margin:0;">
+                                        <input type="radio" name="annTarget" value="ALL" checked onchange="toggleStudentIdField()"> All Students
+                                    </label>
+                                    <label style="display:flex; align-items:center; gap:4px; cursor:pointer; margin:0;">
+                                        <input type="radio" name="annTarget" value="SELECTED" onchange="toggleStudentIdField()"> Selected Students
+                                    </label>
+                                </div>
+                                <div id="annStudentIdGroup" style="display:none; flex:1;">
+                                    <input type="text" id="annStudentIds" placeholder="Enter student IDs (e.g. 1, 3, 5)" style="width:100%;">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary">Post Announcement</button>
+                        </form>
+                    </div>
+
+                    <div class="card table-card">
+                        <h2>Announcement History</h2>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                        <th>Message</th>
+                                        <th>Target</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="announcementsTableBody">
+                                    <!-- injected via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </main>
     </div>
@@ -280,6 +396,14 @@
                     <div class="form-group"><label>Credits</label><input type="number" id="editSubCredits" min="1" max="6" required></div>
                     <div class="form-group"><label>Semester</label><input type="number" id="editSubSem" min="1" max="8" required></div>
                 </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex:1;">
+                        <label>Assigned Faculty</label>
+                        <select id="editSubFacId" style="width: 100%; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 6px;">
+                            <option value="">-- Unassigned --</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="form-actions" style="margin-top:1rem;">
                     <button type="button" class="btn-outline" onclick="closeEditSubjectModal()">Cancel</button>
                     <button type="submit" class="btn-primary">Save changes</button>
@@ -288,11 +412,68 @@
         </div>
     </div>
 
-    <script src="admin-script.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            initAdminDashboard();
-        });
-    </script>
+    <!-- Edit faculty -->
+    <div id="editFacultyModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="editFacultyTitle" onclick="if(event.target===this)closeEditFacultyModal()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <h2 id="editFacultyTitle">Edit faculty</h2>
+            <form id="editFacultyForm" class="admin-form">
+                <input type="hidden" id="editFacId">
+                <div class="form-row">
+                    <div class="form-group"><label>Name</label><input type="text" id="editFacName" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="editFacEmail" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="flex:1;"><label>Department</label><input type="text" id="editFacDept" required></div>
+                </div>
+                <div class="form-actions" style="margin-top:1rem;">
+                    <button type="button" class="btn-outline" onclick="closeEditFacultyModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Assign faculty -->
+    <div id="assignFacultyModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="assignFacultyTitle" onclick="if(event.target===this)closeAssignFacultyModal()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <h2 id="assignFacultyTitle">Assign Faculty to Subject</h2>
+            <form id="assignFacultyForm" class="admin-form" onsubmit="submitAssignFaculty(event)">
+                <input type="hidden" id="assignSubId">
+                <p id="assignSubName" style="color: var(--accent-gold); margin-bottom: 1rem; font-weight: 500;"></p>
+                <div class="form-group">
+                    <label>Select Faculty</label>
+                    <select id="assignFacId" required style="width: 100%; background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 6px;">
+                        <!-- injected via JS -->
+                    </select>
+                </div>
+                <div class="form-actions" style="margin-top:1rem;">
+                    <button type="button" class="btn-outline" onclick="closeAssignFacultyModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Assign</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bulk Assign Subjects to Faculty Modal -->
+    <div id="bulkAssignSubjectsModal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="bulkAssignTitle" onclick="if(event.target===this)closeBulkAssignModal()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <h2 id="bulkAssignTitle">Manage Subjects for Faculty</h2>
+            <form id="bulkAssignForm" class="admin-form" onsubmit="submitBulkAssign(event)">
+                <input type="hidden" id="bulkAssignFacId">
+                <p id="bulkAssignFacName" style="color: var(--accent-gold); margin-bottom: 1rem; font-weight: 500;"></p>
+                <div class="form-group">
+                    <label>Assigned Subjects</label>
+                    <div id="bulkAssignCheckboxes" style="max-height: 200px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 1rem;">
+                        <!-- injected via JS -->
+                    </div>
+                </div>
+                <div class="form-actions" style="margin-top:1rem;">
+                    <button type="button" class="btn-outline" onclick="closeBulkAssignModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Assignments</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </body>
 </html>

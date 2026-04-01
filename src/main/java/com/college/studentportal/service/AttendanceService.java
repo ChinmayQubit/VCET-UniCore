@@ -28,7 +28,9 @@ public class AttendanceService {
     }
 
     @Transactional
-    public void markAttendance(Long subjectId, LocalDate date, Integer sessionNumber, Map<Long, Attendance.AttendanceStatus> studentStatuses) {
+    public void markAttendance(Long subjectId, LocalDate date, Integer sessionNumber,
+                               Map<Long, Attendance.AttendanceStatus> studentStatuses,
+                               com.college.studentportal.model.Faculty markedBy) {
         Subject subject = subjectRepository.findById(subjectId)
                 .orElseThrow(() -> new RuntimeException("Subject not found"));
 
@@ -46,8 +48,10 @@ public class AttendanceService {
             if (existing.isPresent()) {
                 attendance = existing.get();
                 attendance.setStatus(status);
+                attendance.setMarkedBy(markedBy);
             } else {
                 attendance = new Attendance(student, subject, date, status, sessionNumber);
+                attendance.setMarkedBy(markedBy);
             }
             attendanceRepository.save(attendance);
         }

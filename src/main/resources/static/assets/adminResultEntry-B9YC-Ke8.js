@@ -1,0 +1,1 @@
+import"./auth-BMHW_D6G.js";/* empty css                  */import{t as e}from"./resultEntry-C-gxKIyr.js";document.addEventListener(`DOMContentLoaded`,()=>{e()});
